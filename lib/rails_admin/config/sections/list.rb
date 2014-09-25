@@ -13,9 +13,17 @@ module RailsAdmin
         register_instance_option :items_per_page do
           RailsAdmin::Config.default_items_per_page
         end
+        
+        register_instance_option :show_pagination? do
+          true
+        end
 
         register_instance_option :sort_by do
           parent.abstract_model.primary_key
+        end
+        
+        register_instance_option :sort_without_tablename? do
+          false
         end
 
         register_instance_option :sort_reverse? do

@@ -69,6 +69,10 @@ module RailsAdmin
       else # use described column in the field conf.
         "#{abstract_model.table_name}.#{field.sortable}"
       end
+      
+      if model_config.list.sort_without_tablename?
+        column = column.split(".").last
+      end
 
       reversed_sort = (field ? field.sort_reverse? : model_config.list.sort_reverse?)
       {sort: column, sort_reverse: (params[:sort_reverse] == reversed_sort.to_s)}
