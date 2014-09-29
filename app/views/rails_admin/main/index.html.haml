@@ -141,7 +141,13 @@
               %td.other.right= link_to "...", @other_right_link, class: 'pjax'
             %td.last.links
               %ul.inline= menu_for :member, @abstract_model, object, true
-    - if @objects.respond_to?(:total_count) && @model_config.list.show_pagination?
+    - if @model_config.list.no_count_pagination?
+      .pagination
+        %ul
+          - unless @objects.first_page?
+            %li.prev= link_to_previous_page @objects, t('views.pagination.previous').html_safe
+          %li.next= link_to_next_page @objects, t('views.pagination.next').html_safe, page_items: @model_config.list.items_per_page
+    - elsif @objects.respond_to?(:total_count)
       - total_count = @objects.total_count.to_i
       = paginate(@objects, theme: 'twitter-bootstrap', remote: true)
       = link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size

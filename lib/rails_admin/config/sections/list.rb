@@ -14,8 +14,9 @@ module RailsAdmin
           RailsAdmin::Config.default_items_per_page
         end
         
-        register_instance_option :show_pagination? do
-          true
+        # active pagination with just prev/next buttons, to avoid count(*)
+        register_instance_option :no_count_pagination? do
+          false
         end
 
         register_instance_option :sort_by do
