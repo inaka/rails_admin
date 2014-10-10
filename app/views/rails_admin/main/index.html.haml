@@ -41,6 +41,8 @@
     field_options = case field.type
     when :enum
       options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
+    when :lookup
+      {remote_source: index_path(field.associated_model_config.abstract_model.to_param, compact: true)}.to_json
     else
       ''
     end
@@ -62,6 +64,8 @@
           - field_options = case field.type
           - when :enum
             - options_for_select(field.with(object: @abstract_model.model.new).enum)
+          - when :lookup
+            - {remote_source: index_path(field.associated_model_config.abstract_model.to_param, compact: true)}.to_json
           - else
             - ''
           %li

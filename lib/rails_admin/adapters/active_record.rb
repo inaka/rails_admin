@@ -168,7 +168,7 @@ module RailsAdmin
           when :boolean                   then build_statement_for_boolean
           when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
           when :string, :text             then build_statement_for_string_or_text
-          when :enum                      then build_statement_for_enum
+          when :enum, :lookup             then build_statement_for_enum
           when :belongs_to_association    then build_statement_for_belongs_to_association
           end
         end

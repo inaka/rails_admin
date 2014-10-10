@@ -8,6 +8,7 @@
 //=  require 'rails_admin/jquery.ui.timepicker'
 //=  require 'rails_admin/ra.datetimepicker'
 //=  require 'rails_admin/jquery.colorpicker'
+//=  require 'rails_admin/selectize'
 //=  require 'rails_admin/ra.filter-box'
 //=  require 'rails_admin/ra.filtering-multiselect'
 //=  require 'rails_admin/ra.filtering-select'

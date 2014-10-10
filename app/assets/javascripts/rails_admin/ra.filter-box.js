@@ -58,6 +58,11 @@
             '</select> ' +
             '<a href="#" class="switch-select"><i class="icon-' + (multiple_values ? 'minus' : 'plus') + '"></i></a>';
         break;
+        case 'lookup':
+          var opts = field_options;
+          if (typeof(opts) == "string") opts = JSON.parse(field_options);
+          var control = '<select class="selectize" placeholder="Start typing to select" name="'+value_name+'" data-source="'+opts.remote_source+'" data-value='+field_value+'>';
+        break;
         case 'string':
         case 'text':
         case 'belongs_to_association':
@@ -99,6 +104,53 @@
       '</p> ';
       $('#filters_box').append(content);
       $('#filters_box .date').datepicker(this.options.regional.datePicker);
+      $('#filters_box select.selectize:not(.selectized)')
+      .each(function(index, input) {
+        var url = $(input).data("source");
+        var value = $(input).data("value");
+
+        var $component = $(input).selectize({
+          valueField: 'id',
+          labelField: 'label',
+          searchField: 'label',
+          create: false,
+          score: function(search) {
+            var score = this.getScoreFunction(search);
+            return function(item) {
+              return score(item) + 0.1;
+            };
+          },
+          load: function(query, callback) {
+            if (!query.length) return callback();
+            $.ajax({
+              url: url + '&query=' + encodeURIComponent(query),
+              type: 'GET',
+              dataType: 'json',
+              error: function() {
+                callback();
+              },
+              success: function(res) {
+                callback(res);
+              }
+            });
+          }
+        });
+
+        // add selected items
+        if (value){
+          $.ajax({
+            url: url + '&bulk_ids=' + encodeURIComponent(value),
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+              if (res.length){
+                $component[0].selectize.addOption(res);
+                $component[0].selectize.setValue(res[0].id);
+              }
+            }
+          });
+        }
+      });
       $("hr.filters_box:hidden").show('slow');
     }
   }
